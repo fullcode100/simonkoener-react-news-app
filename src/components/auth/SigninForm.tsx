@@ -48,7 +48,7 @@ const SigninForm: React.FC<SigninFormProps> = ({ pending, onSubmit }) => (
     </Form.Item>
 
     <div style={{ textAlign: "center" }}>
-      <Link to="/news">New to our site? Click here to sign up</Link>
+      <Link to="/signup">New to our site? Click here to sign up</Link>
     </div>
 
     <div style={{ textAlign: "center", margin: "15px 0" }}>

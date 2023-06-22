@@ -19,11 +19,36 @@ declare namespace API {
   };
 
   export type UserLoginResp = {
-    token: string;
+    success: boolean;
+    data: {
+      token: string;
+      name: string;
+    };
+    message: string;
   };
 
   export type UserRegisterResp = {
     id: string;
     message: string;
+  };
+
+  export type ArticleListResp = {
+    source: {
+      id: string;
+      name: string;
+    };
+    author: string;
+    title: string;
+    description: string;
+    url: string;
+    urlToImage: string;
+    publishedAt: string;
+    content: string;
+  };
+
+  export type NewsListResp = {
+    status: string;
+    totalResults: number;
+    articles: ArticleListResp[];
   };
 }

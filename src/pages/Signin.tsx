@@ -22,8 +22,8 @@ const Signin: React.FC = () => {
     onSuccess: (response, variables, context) => {
       const data: API.UserLoginResp = response.data;
       console.log(data);
-      if (data.token) {
-        const token = data.token;
+      if (data.data.token) {
+        const token = data.data.token;
         localStorage.setItem("authtoken", token);
         startNavigation(() => setToken(token));
       }
