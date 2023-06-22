@@ -1,8 +1,9 @@
 import * as React from "react";
-import { Outlet } from "react-router-dom";
-import { Col, Layout, Row, notification } from "antd";
+import { Link, Outlet } from "react-router-dom";
+import { Col, Layout, Row, notification, Menu, Button, Space } from "antd";
+import { useAuth } from "../../utils/auth";
 
-const { Content } = Layout;
+const { Header, Content, Footer } = Layout;
 
 const contentStyle = {
   padding: "20px 25px",
@@ -10,15 +11,31 @@ const contentStyle = {
 };
 
 const containerStyle = {
-  maxWidth: 800,
+  maxWidth: 1200,
   margin: "auto",
 };
 
 const AppLayout: React.FC = () => {
   const [, contextHolder] = notification.useNotification();
+  const [, setToken] = useAuth();
+
+  const signOut = () => {
+    localStorage.removeItem("authtoken");
+    setToken("");
+  };
 
   return (
     <Layout className="layout">
+      <Header
+        style={{ display: "flex", alignItems: "center", justifyContent: "end" }}
+      >
+        <div className="demo-logo" />
+        <Menu theme="dark" mode="horizontal">
+          <a type="default" onClick={signOut} style={{ color: "white" }}>
+            Sign Out
+          </a>
+        </Menu>
+      </Header>
       <Content style={contentStyle}>
         <div style={containerStyle}>
           <Row gutter={16}>

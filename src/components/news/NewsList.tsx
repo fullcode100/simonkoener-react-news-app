@@ -5,9 +5,16 @@ import { Link } from "react-router-dom";
 interface NewsListProps {
   pending: boolean;
   articles: API.ArticleListResp[];
+  total: number | undefined;
+  onPaginateChange: (page: number, pageSize: number) => void;
 }
 
-const NewsList: React.FC<NewsListProps> = ({ pending, articles }) => {
+const NewsList: React.FC<NewsListProps> = ({
+  pending,
+  articles,
+  total,
+  onPaginateChange,
+}) => {
   return (
     <>
       <List
@@ -39,6 +46,13 @@ const NewsList: React.FC<NewsListProps> = ({ pending, articles }) => {
           </>
         )}
       />
+      <div style={{ textAlign: "center" }}>
+        <Pagination
+          defaultCurrent={1}
+          onChange={onPaginateChange}
+          total={total}
+        />
+      </div>
     </>
   );
 };

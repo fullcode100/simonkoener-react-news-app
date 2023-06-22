@@ -17,6 +17,8 @@ const NewsListPage: React.FC = () => {
   const [, setToken] = useAuth();
 
   const [searchKey, setSearchKey] = React.useState<string>("");
+  const [pageSize, setPageSize] = React.useState<number>(15);
+  const [page, setPage] = React.useState<number>(1);
 
   const { data, isLoading, isSuccess, error, refetch } = useQuery<
     Promise<any>,
@@ -27,6 +29,10 @@ const NewsListPage: React.FC = () => {
     queryKey: ["news"],
     queryFn: () => newsList(searchKey),
   });
+
+  const handlePaginateChange = (pageNo: number, pageS: number) => {
+    setPage(pageNo);
+  };
 
   React.useEffect(() => {
     if (error) {
@@ -39,15 +45,10 @@ const NewsListPage: React.FC = () => {
 
   React.useEffect(() => {
     refetch();
-  }, [searchKey]);
+  }, [page, pageSize, searchKey]);
 
   const handleSearch = (value: string) => {
     setSearchKey(value);
-  };
-
-  const signOut = () => {
-    localStorage.removeItem("authtoken");
-    setToken("");
   };
 
   return (
@@ -57,9 +58,6 @@ const NewsListPage: React.FC = () => {
         <Space>
           <Button type="primary" onClick={() => nagivate("tasks/new")}>
             New Task
-          </Button>
-          <Button type="default" onClick={signOut}>
-            Sign Out
           </Button>
         </Space>
         <hr />
@@ -72,6 +70,8 @@ const NewsListPage: React.FC = () => {
       <NewsList
         pending={isLoading}
         articles={isSuccess ? data.data.articles : []}
+        total={data?.data.totalResults}
+        onPaginateChange={handlePaginateChange}
       />
     </Block>
   );
