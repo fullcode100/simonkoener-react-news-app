@@ -16,6 +16,8 @@ const NewsListPage: React.FC = () => {
   const nagivate = useNavigate();
   const [, setToken] = useAuth();
 
+  const [searchKey, setSearchKey] = React.useState<string>("");
+
   const { data, isLoading, isSuccess, error, refetch } = useQuery<
     Promise<any>,
     AxiosError,
@@ -23,7 +25,7 @@ const NewsListPage: React.FC = () => {
     any
   >({
     queryKey: ["news"],
-    queryFn: () => newsList(),
+    queryFn: () => newsList(searchKey),
   });
 
   React.useEffect(() => {
@@ -34,6 +36,14 @@ const NewsListPage: React.FC = () => {
       }
     }
   }, [error]);
+
+  React.useEffect(() => {
+    refetch();
+  }, [searchKey]);
+
+  const handleSearch = (value: string) => {
+    setSearchKey(value);
+  };
 
   const signOut = () => {
     localStorage.removeItem("authtoken");
@@ -53,6 +63,11 @@ const NewsListPage: React.FC = () => {
           </Button>
         </Space>
         <hr />
+        <Input.Search
+          placeholder="input search text"
+          onSearch={handleSearch}
+          style={{ width: "100%" }}
+        />
       </div>
       <NewsList
         pending={isLoading}

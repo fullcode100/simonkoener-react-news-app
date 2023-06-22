@@ -1,3 +1,4 @@
 import instance from "..";
 
-export const newsList = () => instance.get<string, API.CommonResp>("news/");
+export const newsList = (searchKey: string) =>
+  instance.get<string, API.CommonResp>(`news?searchKey=${searchKey}`);

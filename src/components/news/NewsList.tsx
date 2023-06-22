@@ -29,11 +29,7 @@ const NewsList: React.FC<NewsListProps> = ({ pending, articles }) => {
               ]}
             >
               <List.Item.Meta
-                avatar={
-                  <Avatar
-                    src={`https://xsgames.co/randomusers/avatar.php?g=pixel&key=${index}`}
-                  />
-                }
+                avatar={<Avatar src={`${item.urlToImage}`} />}
                 title={
                   <Link to={"articles/view/" + item.title}>{item.title}</Link>
                 }
