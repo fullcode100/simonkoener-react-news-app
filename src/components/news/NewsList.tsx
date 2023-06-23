@@ -22,24 +22,10 @@ const NewsList: React.FC<NewsListProps> = ({
         loading={pending}
         renderItem={(item, index) => (
           <>
-            <List.Item
-              actions={[
-                <Link to={"articles/view/" + item.title}>View</Link>,
-                <Popconfirm
-                  placement="leftBottom"
-                  title="Are you sure to delete this task?"
-                  okText="Yes"
-                  cancelText="No"
-                >
-                  <Button type="link">Delete</Button>
-                </Popconfirm>,
-              ]}
-            >
+            <List.Item>
               <List.Item.Meta
                 avatar={<Avatar src={`${item.urlToImage}`} />}
-                title={
-                  <Link to={"articles/view/" + item.title}>{item.title}</Link>
-                }
+                title={<Link to={"news/view/" + item.title}>{item.title}</Link>}
                 description={item.description}
               />
             </List.Item>

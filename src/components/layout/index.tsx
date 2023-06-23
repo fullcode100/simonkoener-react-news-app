@@ -27,9 +27,13 @@ const AppLayout: React.FC = () => {
   return (
     <Layout className="layout">
       <Header
-        style={{ display: "flex", alignItems: "center", justifyContent: "end" }}
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
       >
-        <div className="demo-logo" />
+        <span style={{ color: "white", fontSize: "36px" }}>NEWS</span>
         <Menu theme="dark" mode="horizontal">
           <a type="default" onClick={signOut} style={{ color: "white" }}>
             Sign Out
