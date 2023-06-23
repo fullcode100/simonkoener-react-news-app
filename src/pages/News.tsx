@@ -1,6 +1,17 @@
 import * as React from "react";
 import { AxiosError } from "axios";
-import { Button, Space, Typography, Input } from "antd";
+import {
+  Button,
+  Space,
+  Typography,
+  Input,
+  Dropdown,
+  message,
+  Row,
+  Col,
+} from "antd";
+import type { MenuProps } from "antd";
+import { DownOutlined, UserOutlined } from "@ant-design/icons";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 
@@ -16,7 +27,57 @@ const NewsListPage: React.FC = () => {
   const nagivate = useNavigate();
   const [, setToken] = useAuth();
 
-  const [searchKey, setSearchKey] = React.useState<string>("");
+  const [searchKey, setSearchKey] = React.useState<string>(" ");
+  const [category, setCategory] = React.useState<string>("Business");
+  const [pageSize, setPageSize] = React.useState<number>(15);
+  const [page, setPage] = React.useState<number>(1);
+
+  const handleMenuClick: MenuProps["onClick"] = (e) => {
+    setCategory(e.key);
+  };
+
+  const items: MenuProps["items"] = [
+    {
+      label: "Business",
+      key: "Business",
+      icon: <UserOutlined />,
+    },
+    {
+      label: "Entertainment",
+      key: "Entertainment",
+      icon: <UserOutlined />,
+    },
+    {
+      label: "General",
+      key: "General",
+      icon: <UserOutlined />,
+    },
+    {
+      label: "Health",
+      key: "Health",
+      icon: <UserOutlined />,
+    },
+    {
+      label: "Science",
+      key: "Science",
+      icon: <UserOutlined />,
+    },
+    {
+      label: "Sports",
+      key: "Sports",
+      icon: <UserOutlined />,
+    },
+    {
+      label: "Technology",
+      key: "Technology",
+      icon: <UserOutlined />,
+    },
+  ];
+
+  const menuProps = {
+    items,
+    onClick: handleMenuClick,
+  };
 
   const { data, isLoading, isSuccess, error, refetch } = useQuery<
     Promise<any>,
@@ -25,8 +86,13 @@ const NewsListPage: React.FC = () => {
     any
   >({
     queryKey: ["news"],
-    queryFn: () => newsList(searchKey),
+    queryFn: () => newsList(page, pageSize, searchKey, category),
   });
+
+  const handlePaginateChange = (pageNo: number, pageS: number) => {
+    setPageSize(pageS);
+    setPage(pageNo);
+  };
 
   React.useEffect(() => {
     if (error) {
@@ -35,43 +101,61 @@ const NewsListPage: React.FC = () => {
         setToken("");
       }
     }
-  }, [error]);
+    console.log(isLoading);
+  }, [error, isLoading]);
 
   React.useEffect(() => {
     refetch();
-  }, [searchKey]);
+  }, [page, pageSize, searchKey, category]);
 
   const handleSearch = (value: string) => {
     setSearchKey(value);
   };
 
-  const signOut = () => {
-    localStorage.removeItem("authtoken");
-    setToken("");
-  };
-
   return (
     <Block>
-      <div style={{ textAlign: "center", margin: "15px 0" }}>
-        <Title level={2}>NEWS LIST</Title>
-        <Space>
-          <Button type="primary" onClick={() => nagivate("tasks/new")}>
-            New Task
-          </Button>
-          <Button type="default" onClick={signOut}>
-            Sign Out
-          </Button>
-        </Space>
-        <hr />
-        <Input.Search
-          placeholder="input search text"
-          onSearch={handleSearch}
-          style={{ width: "100%" }}
-        />
-      </div>
+      <Row>
+        <Col md={12} xs={24}>
+          <div style={{ display: "flex", margin: "15px 10px" }}>
+            <Input.Search
+              placeholder="input search text"
+              onSearch={handleSearch}
+              style={{ width: "100%" }}
+            />
+            <div style={{ marginLeft: "10px" }}>
+              <Dropdown menu={menuProps}>
+                <Button>
+                  <Space>
+                    {category}
+                    <DownOutlined />
+                  </Space>
+                </Button>
+              </Dropdown>
+            </div>
+          </div>
+        </Col>
+        <Col md={12} xs={24}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              margin: "15px 0",
+            }}
+          >
+            <Input
+              placeholder="from"
+              type="date"
+              style={{ marginRight: "10px" }}
+            />
+            <Input placeholder="from" type="date" />
+          </div>
+        </Col>
+      </Row>
       <NewsList
         pending={isLoading}
         articles={isSuccess ? data.data.articles : []}
+        total={data?.data.totalResults}
+        onPaginateChange={handlePaginateChange}
       />
     </Block>
   );

@@ -27,7 +27,7 @@ const Signin: React.FC = () => {
         localStorage.setItem("authtoken", token);
         startNavigation(() => setToken(token));
       }
-      navigate("/signup");
+      navigate("/news");
     },
     onError(error, variables, context) {
       api.error({
