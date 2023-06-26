@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useMutation } from "@tanstack/react-query";
-import { useNavigate } from "react-router-dom";
+import { redirect, useNavigate } from "react-router-dom";
 import { notification } from "antd";
 
 import Block from "../components/common/Block";
@@ -21,11 +21,10 @@ const Signin: React.FC = () => {
     },
     onSuccess: (response, variables, context) => {
       const data: API.UserLoginResp = response.data;
-      console.log(data);
       if (data.data.token) {
         const token = data.data.token;
         localStorage.setItem("authtoken", token);
-        startNavigation(() => setToken(token));
+        setToken(token);
       }
       navigate("/news");
     },

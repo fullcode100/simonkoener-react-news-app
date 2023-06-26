@@ -7,6 +7,7 @@ import {
   Input,
   Dropdown,
   message,
+  notification,
   Row,
   Col,
 } from "antd";
@@ -28,49 +29,37 @@ const NewsListPage: React.FC = () => {
   const [, setToken] = useAuth();
 
   const [searchKey, setSearchKey] = React.useState<string>(" ");
-  const [category, setCategory] = React.useState<string>("Business");
+  const [domain, setDomain] = React.useState<string>("techcrunch.com");
   const [pageSize, setPageSize] = React.useState<number>(15);
   const [page, setPage] = React.useState<number>(1);
+  const [startDate, setStartDate] = React.useState<string>("2023-06-21");
+  const [endDate, setEndDate] = React.useState<string>("2023-06-21");
+  const [api, contextHolder] = notification.useNotification();
 
   const handleMenuClick: MenuProps["onClick"] = (e) => {
-    setCategory(e.key);
+    setDomain(e.key);
   };
 
   const items: MenuProps["items"] = [
     {
-      label: "Business",
-      key: "Business",
-      icon: <UserOutlined />,
+      label: "bbc.co.uk",
+      key: "bbc.co.uk",
     },
     {
-      label: "Entertainment",
-      key: "Entertainment",
-      icon: <UserOutlined />,
+      label: "techcrunch.com",
+      key: "techcrunch.com",
     },
     {
-      label: "General",
-      key: "General",
-      icon: <UserOutlined />,
+      label: "engadget.com",
+      key: "engadget.com",
     },
     {
-      label: "Health",
-      key: "Health",
-      icon: <UserOutlined />,
+      label: "wsj.com",
+      key: "wsj.com",
     },
     {
-      label: "Science",
-      key: "Science",
-      icon: <UserOutlined />,
-    },
-    {
-      label: "Sports",
-      key: "Sports",
-      icon: <UserOutlined />,
-    },
-    {
-      label: "Technology",
-      key: "Technology",
-      icon: <UserOutlined />,
+      label: "usatoday.com",
+      key: "usatoday.com",
     },
   ];
 
@@ -86,7 +75,8 @@ const NewsListPage: React.FC = () => {
     any
   >({
     queryKey: ["news"],
-    queryFn: () => newsList(page, pageSize, searchKey, category),
+    queryFn: () =>
+      newsList(page, pageSize, searchKey, domain, startDate, endDate),
   });
 
   const handlePaginateChange = (pageNo: number, pageS: number) => {
@@ -101,19 +91,33 @@ const NewsListPage: React.FC = () => {
         setToken("");
       }
     }
-    console.log(isLoading);
   }, [error, isLoading]);
 
   React.useEffect(() => {
     refetch();
-  }, [page, pageSize, searchKey, category]);
+  }, [page, pageSize, searchKey, domain, startDate, endDate]);
 
   const handleSearch = (value: string) => {
     setSearchKey(value);
   };
 
+  const startDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.value > endDate) {
+      e.target.value = "";
+      api.error({
+        message: "An error has occurred",
+        placement: "top",
+      });
+    } else setStartDate(e.target.value);
+  };
+
+  const endDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEndDate(e.target.value);
+  };
+
   return (
     <Block>
+      {contextHolder}
       <Row>
         <Col md={12} xs={24}>
           <div style={{ display: "flex", margin: "15px 10px" }}>
@@ -126,7 +130,7 @@ const NewsListPage: React.FC = () => {
               <Dropdown menu={menuProps}>
                 <Button>
                   <Space>
-                    {category}
+                    {domain}
                     <DownOutlined />
                   </Space>
                 </Button>
@@ -142,12 +146,15 @@ const NewsListPage: React.FC = () => {
               margin: "15px 0",
             }}
           >
+            <span style={{ marginRight: "5px" }}>From:</span>
             <Input
-              placeholder="from"
+              placeholder="2023-6-22"
               type="date"
               style={{ marginRight: "10px" }}
+              onChange={startDateChange}
             />
-            <Input placeholder="from" type="date" />
+            <span style={{ marginRight: "5px" }}>To:</span>
+            <Input placeholder="from" type="date" onChange={endDateChange} />
           </div>
         </Col>
       </Row>

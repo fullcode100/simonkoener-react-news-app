@@ -25,7 +25,11 @@ const NewsList: React.FC<NewsListProps> = ({
             <List.Item>
               <List.Item.Meta
                 avatar={<Avatar src={`${item.urlToImage}`} />}
-                title={<Link to={"news/view/" + item.title}>{item.title}</Link>}
+                title={
+                  <Link to={"/news/view/?title=" + item.title}>
+                    {item.title}
+                  </Link>
+                }
                 description={item.description}
               />
             </List.Item>

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import { Col, Layout, Row, notification, Menu, Button, Space } from "antd";
 import { useAuth } from "../../utils/auth";
 
@@ -16,6 +16,8 @@ const containerStyle = {
 };
 
 const AppLayout: React.FC = () => {
+  const auth = useAuth();
+  const navigate = useNavigate();
   const [, contextHolder] = notification.useNotification();
   const [, setToken] = useAuth();
 
@@ -26,20 +28,28 @@ const AppLayout: React.FC = () => {
 
   return (
     <Layout className="layout">
-      <Header
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}
-      >
-        <span style={{ color: "white", fontSize: "36px" }}>NEWS</span>
-        <Menu theme="dark" mode="horizontal">
+      {auth[0] ? (
+        <Header
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <Link
+            type="default"
+            to={"/news"}
+            style={{ color: "white", fontSize: "36px" }}
+          >
+            NEWS
+          </Link>
           <a type="default" onClick={signOut} style={{ color: "white" }}>
             Sign Out
           </a>
-        </Menu>
-      </Header>
+        </Header>
+      ) : (
+        ""
+      )}
       <Content style={contentStyle}>
         <div style={containerStyle}>
           <Row gutter={16}>

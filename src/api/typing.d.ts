@@ -51,4 +51,10 @@ declare namespace API {
     totalResults: number;
     articles: ArticleListResp[];
   };
+
+  export type NewsDetailResp = {
+    status: string;
+    totalResults: number;
+    articles: ArticleListResp[];
+  };
 }
