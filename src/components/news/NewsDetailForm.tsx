@@ -1,6 +1,5 @@
 import * as React from "react";
 import { Avatar, List, Space, Spin } from "antd";
-import Spinner from "../common/Spinner";
 
 interface NewsDetailFormPops {
   pending: boolean;
@@ -35,32 +34,6 @@ const NewsDetailForm: React.FC<NewsDetailFormPops> = ({ pending, article }) => {
           </List.Item>
         )}
       />
-      {/* <List
-        dataSource={article}
-        loading={pending}
-        renderItem={(item, index) => (
-          <>
-            <div style={{ textAlign: "center" }}>
-              <img
-                src={`${item.urlToImage}`}
-                alt=""
-                width="100px"
-                height="100px"
-              />
-            </div>
-            <div style={{ textAlign: "center" }}>
-              <h2>{item.title}</h2>
-            </div>
-            <List.Item>
-              <List.Item.Meta
-                avatar={<Avatar src={`${item.urlToImage}`} />}
-                title={item.title}
-                description={item.description}
-              />
-            </List.Item>
-          </>
-        )}
-      /> */}
     </>
   );
 };
